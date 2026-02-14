@@ -1,6 +1,6 @@
 ---
 name: coverage-gated-refactor
-description: "Drive full-project modular refactors with a strict pipeline: prioritize splitting oversized files, enumerate candidates for user scope selection, raise per-module test coverage to at least 90 percent with verified runnable tests, refactor frontend and backend in slices with immediate regression checks, update related documentation, and finish only when all selected modules plus historical tests pass."
+description: "Drive full-project modular refactors with a strict pipeline: enumerate all changeable items by module and parts, use interactive CLI selection for large candidate sets, lock user scope, then execute uninterrupted with 90 percent module coverage gates until completion."
 ---
 
 # Coverage Gated Refactor
@@ -57,27 +57,36 @@ Load reference files from `reference/`:
 4. Convert the user goal into success criteria and keep it in progress reports.
 5. After scope selection, load matching `reference/*.md` files before candidate planning.
 
-### 1. Build Refactor Candidate Map (Mandatory)
+### 1. Build Full Change Inventory And Scope Lock (Mandatory)
 
-1. Inventory code by module boundaries, file size, coupling, churn risk, and bug density.
-2. Prioritize oversized files and modules first; make large-file decomposition the default first wave.
-3. Enumerate refactor candidates as a user-facing list.
-4. For each candidate, include:
-   - Why it should be refactored
-   - Expected benefit
-   - Estimated risk
-   - Suggested order
-5. Present options to user:
-   - Select specific modules
-   - Select all modules
-6. If user says “all”, execute full list without skipping.
+1. Enumerate all changeable items first, not partial sampling.
+2. Build a matrix: `module -> changeable parts`.
+3. For each module, list at least:
+   - module name/path
+   - candidate parts to modify (logic/API/state/UI/tests/docs/config)
+   - risk level
+   - estimated effort
+4. Ask user to choose both:
+   - selected modules
+   - selected parts inside each module
+5. Support `all` scope for modules and parts.
+6. If user chooses `all`, execute full list without skipping.
+7. Do not start refactor until user selection is fully completed and locked.
+
+### 1.1 Interactive Selection Rule (Mandatory For Large Inventories)
+
+1. If candidate modules are many (recommended threshold: `>12`) or total selectable parts are many (recommended threshold: `>40`), use interactive CLI selection.
+2. Preferred CLI selector script:
+   - `python3 scripts/interactive_refactor_selector.py --input /tmp/refactor-candidates.json --output /tmp/refactor-selection.json`
+3. If selector script cannot be run, fall back to terminal numbered selection with clear module/part IDs.
+4. Keep a selection lock artifact (`/tmp/refactor-selection.json`) and echo the final scope back to the user.
 
 ### 2. Autonomous Execution Rule (Mandatory)
 
 1. If user explicitly requires full autonomous execution, continue end-to-end without pausing for optional confirmation.
 2. If user explicitly says "do not stop" or equivalent, do not pause for stage handoffs, progress approvals, or reconfirmation prompts.
    - 硬规则：用户明确要求“不要停”时，不得中途停下来询问、确认或等待批准，必须连续执行到全部任务完成（除非遇到无法自行解决的硬阻塞）。
-3. Execute continuously in one run until all selected scope and all gates are completed.
+3. After selection lock is completed, execute continuously in one run until all selected scope and all gates are completed.
 4. Ask questions only for hard blockers that cannot be resolved from repository context.
 5. Keep executing module by module until all selected scope is completed and all gates pass.
 
@@ -179,24 +188,27 @@ Use this concise status format while executing:
 
 1. Refactor goal: user-stated purpose and success criteria.
 2. User scope: frontend/backend/other/all.
-3. Loaded references: selected `reference/*.md` files.
-4. Applied standards/methods: extracted checklist and operations.
-5. Candidate map: listed modules and default order.
-6. Baseline: tests X pass / Y fail, coverage S/B/F/L.
-7. Module gate: module name, coverage, test status.
-8. Refactor progress: completed module list and next module.
-9. Final gate: full historical tests pass/fail and completion decision.
-10. Docs sync: updated docs list and validation result.
+3. Change inventory: full module->parts matrix.
+4. Selection lock: selected modules + selected parts per module.
+5. Loaded references: selected `reference/*.md` files.
+6. Applied standards/methods: extracted checklist and operations.
+7. Baseline: tests X pass / Y fail, coverage S/B/F/L.
+8. Module gate: module name, coverage, test status.
+9. Refactor progress: completed modules and next module.
+10. Final gate: full historical tests pass/fail and completion decision.
+11. Docs sync: updated docs list and validation result.
 
 ## Do Not
 
 1. Do not skip refactor-goal capture and scope selection.
 2. Do not skip scoped reference loading from `reference/`.
-3. Do not skip module enumeration and user scope confirmation.
-4. Do not start module refactor before module test gate.
-5. Do not claim “fully guaranteed” behavior parity without evidence.
-6. Do not use destructive git commands unless explicitly requested.
-7. Do not weaken or bypass tests to hit target numbers.
-8. Do not stop midway when user asked for full autonomous completion, unless hard-blocked.
-9. Do not stop when user explicitly says "do not stop"; finish the entire pipeline in one continuous execution unless truly hard-blocked.
-10. 硬规则：当用户说“不要停”时，必须一口气做完，不得中断回问；仅在确实无法自行处理的硬阻塞下才可暂停并说明原因。
+3. Do not skip full module->parts enumeration before selection.
+4. Do not start any code change before selection lock is complete.
+5. Do not skip module enumeration and user scope confirmation.
+6. Do not start module refactor before module test gate.
+7. Do not claim “fully guaranteed” behavior parity without evidence.
+8. Do not use destructive git commands unless explicitly requested.
+9. Do not weaken or bypass tests to hit target numbers.
+10. Do not stop midway when user asked for full autonomous completion, unless hard-blocked.
+11. Do not stop when user explicitly says "do not stop"; finish the entire pipeline in one continuous execution unless truly hard-blocked.
+12. 硬规则：当用户说“不要停”时，必须一口气做完，不得中断回问；仅在确实无法自行处理的硬阻塞下才可暂停并说明原因。

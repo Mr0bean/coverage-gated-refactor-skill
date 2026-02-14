@@ -11,6 +11,23 @@ This skill supports step loading from `reference/` with file naming:
 
 Current project packs are listed in `reference/index.md`.
 
+## Interactive Scope Selection
+
+When candidates are large, use interactive CLI selection to let user choose:
+
+1. Which modules to modify
+2. Which parts inside each module to modify
+
+Command:
+
+```bash
+python3 scripts/interactive_refactor_selector.py \
+  --input /tmp/refactor-candidates.json \
+  --output /tmp/refactor-selection.json
+```
+
+The refactor starts only after user confirms final selection (`YES`).
+
 ## Design Philosophy
 
 1. Split oversized files first to reduce structural risk.

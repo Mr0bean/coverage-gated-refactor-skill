@@ -1,4 +1,4 @@
 interface:
   display_name: "Coverage-Gated Refactor"
-  short_description: "Step-load reference packs by scenario/language/architecture for gated refactors"
-  default_prompt: "Capture user refactor goal and scope first, step-load matching reference files from reference/ using 场景_语言_架构 naming, prioritize oversized file decomposition, enforce 90 percent module coverage with runnable tests before each refactor, execute autonomously end-to-end when requested, update related documentation, and finish only when all selected modules plus historical tests pass."
+  short_description: "Enumerate module->parts, interactive-select scope, then uninterrupted gated refactor"
+  default_prompt: "Capture user refactor goal and scope first, enumerate all changeable modules and parts, use interactive CLI selection for large candidate sets, lock final selected modules and parts, then execute uninterrupted with 90 percent module coverage gates, module-level regression checks, and documentation updates until all selected work is complete."
