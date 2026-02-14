@@ -53,13 +53,14 @@ Use prompts like:
 2. If no tests exist, the agent should establish a runnable test baseline first.
 3. Hard blockers (missing credentials, broken environment, external outages) are the only valid pause points when user requires nonstop execution.
 
----
+## Multilingual
 
-# 中文说明（Chinese）
+<details>
+<summary>中文（Chinese）</summary>
 
 这是一个用于“覆盖率门禁重构”的 Codex Skill，适用于全项目、分模块、可验证的重构执行。
 
-## 设计思路
+### 设计思路
 
 1. 先拆超大文件，再处理次级模块。
 2. 按业务边界拆分，不按行数硬切。
@@ -68,7 +69,7 @@ Use prompts like:
 5. 前端、后端、文档一体化推进。
 6. 用户说“不要停”时，必须连续执行到完成，除非硬阻塞。
 
-## 使用方式
+### 使用方式
 
 1. 按上方安装命令将 `SKILL.md` 和 `agents/openai.yaml` 放到 `~/.codex/skills/coverage-gated-refactor/`。
 2. 在任务中明确要求：
@@ -83,8 +84,10 @@ Use prompts like:
    - 分片重构与回归
    - 全量回归通过后完成
 
-## 关键承诺
+### 关键承诺
 
 1. 有门禁才推进，无门禁不重构。
 2. 用户要求“不要停”时，不做可选确认中断。
 3. 完成标准是“全部选中模块完成 + 历史测试全绿 + 文档同步”。
+
+</details>
