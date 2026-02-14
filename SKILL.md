@@ -38,6 +38,8 @@ Load reference files from `reference/`:
 3. For each loaded file, extract and apply:
    - refactor approach
    - compliance approach
+   - standards checklist
+   - actionable operation methods
    - best practices
 4. Record loaded reference files in progress reports.
 
@@ -178,12 +180,13 @@ Use this concise status format while executing:
 1. Refactor goal: user-stated purpose and success criteria.
 2. User scope: frontend/backend/other/all.
 3. Loaded references: selected `reference/*.md` files.
-4. Candidate map: listed modules and default order.
-5. Baseline: tests X pass / Y fail, coverage S/B/F/L.
-6. Module gate: module name, coverage, test status.
-7. Refactor progress: completed module list and next module.
-8. Final gate: full historical tests pass/fail and completion decision.
-9. Docs sync: updated docs list and validation result.
+4. Applied standards/methods: extracted checklist and operations.
+5. Candidate map: listed modules and default order.
+6. Baseline: tests X pass / Y fail, coverage S/B/F/L.
+7. Module gate: module name, coverage, test status.
+8. Refactor progress: completed module list and next module.
+9. Final gate: full historical tests pass/fail and completion decision.
+10. Docs sync: updated docs list and validation result.
 
 ## Do Not
 

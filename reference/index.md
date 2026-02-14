@@ -23,7 +23,15 @@
    - `backend`：加载 `backend_typescript_nextjs-route-handlers.md`、`backend_python_flask-microservice.md`、`backend_typescript_json-file-storage.md`、`platform_typescript-python_docker-single-container.md`
    - `other`：加载 `other_typescript_jest-testing.md`
    - `all`：加载全部文件
-3. 每个已加载文件必须提取并落地三类内容：
+3. 每个已加载文件必须提取并落地五类内容：
    - 重构思路
    - 合规思路
+   - 规范清单
+   - 可参考操作方法
    - 最佳实践
+
+## 执行建议
+
+1. 每次至少从每个已加载文件提炼 3 条可执行项进入当次计划。
+2. 优先采用“低风险、可验证、可回滚”的操作方法。
+3. 将采用的规范映射到代码、测试、文档三个维度的具体动作。
