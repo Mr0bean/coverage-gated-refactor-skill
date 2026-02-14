@@ -1,100 +1,104 @@
 # Coverage-Gated Refactor Skill
 
-A Codex skill for full-project refactors with strict safety gates, partition-based step loading, and source-backed best-practice research.
+A Codex skill for full-project refactors with strict safety gates, partition-aware loading, and source-backed best-practice research.
 
 ## Design Philosophy
 
-1. Split oversized files first.
-2. Refactor by domain/module boundaries, not random line cuts.
-3. Use tests as the behavior contract before and after each slice.
-4. Enforce module coverage gates (target: 90%+).
-5. Run frontend, backend, language, and docs in one governed pipeline.
-6. Load guidance step-by-step from partition folders, not all at once.
-7. If user says "do not stop", execute continuously unless hard-blocked.
+1. Split oversized files first to reduce structural risk.
+2. Refactor by module boundaries, not random line-based cuts.
+3. Build test evidence before and after each refactor slice.
+4. Require strong module coverage (target: 90%+) before deep changes.
+5. Cover frontend, backend, and related docs in one workflow.
+6. Detect frontend/backend/language/architecture partitions first, then load only relevant guidance.
+7. If the user says "do not stop", execute continuously end-to-end unless hard-blocked.
 
-## Partition Packs
+## Workflow (High Level)
 
-This skill uses these folders:
+1. Detect technology partitions and load scoped reference packs.
+2. Enumerate refactor candidates for user scope selection.
+3. Build/repair baseline test and coverage pipeline.
+4. Run per-partition best-practice research from primary sources.
+5. For each selected module: write tests first and hit coverage gate.
+6. Refactor in safe slices and run tests after each slice.
+7. Run full regression after each module.
+8. Update documentation to match the new structure.
+9. Finish only when all selected modules and historical tests pass.
 
-1. `./fornt`
-2. `./backend`
-3. `./python`
-4. `./typescript`
-5. `./nextjs`
+## How To Use
 
-Each folder contains:
-
-1. `index.md`
-2. `summary.md`
-3. `sources/*.md` (downloaded URL snapshots + distilled point)
-
-## Step Loading Order
-
-1. Read `partition-loader.md`.
-2. Detect partitions from repo evidence.
-3. Load only matching packs (`fornt/backend/python/typescript/nextjs`).
-4. Read each matched `summary.md` first.
-5. Open only required `sources/*.md` files for current module decisions.
-
-## How To Install
+### 1. Install Skill
 
 ```bash
 mkdir -p ~/.codex/skills/coverage-gated-refactor
 cp SKILL.md ~/.codex/skills/coverage-gated-refactor/SKILL.md
-cp partition-loader.md ~/.codex/skills/coverage-gated-refactor/partition-loader.md
 mkdir -p ~/.codex/skills/coverage-gated-refactor/agents
 cp agents/openai.yaml ~/.codex/skills/coverage-gated-refactor/agents/openai.yaml
-for d in fornt backend python typescript nextjs; do
-  mkdir -p ~/.codex/skills/coverage-gated-refactor/$d
-  cp -R "$d"/* ~/.codex/skills/coverage-gated-refactor/$d/
-done
+mkdir -p ~/.codex/skills/coverage-gated-refactor/references
+cp -R references/* ~/.codex/skills/coverage-gated-refactor/references/
 ```
 
-## How To Use
+### 2. Start A Task
 
-Prompt examples:
+Use prompts like:
 
-1. `Use coverage-gated-refactor. Detect partitions and load only matching packs first.`
+1. `Use coverage-gated-refactor. Detect partitions and enumerate all refactor candidates first.`
 2. `Refactor all modules. Do not stop.`
-3. `Use source snapshots in fornt/backend/python/typescript/nextjs to justify design decisions.`
+3. `Research best practices for each detected partition from official docs before refactoring.`
 4. `Keep module coverage above 90% and run full regression after each module.`
 
-## Expected Behavior
+### 3. Expected Behavior
 
-1. Detect partition evidence first.
-2. Load packs in steps and keep context scoped.
-3. Reference local source snapshots when choosing architecture and code patterns.
-4. Run test-gated refactor slices with continuous regression checks.
-5. Finish only when selected scope, tests, and docs are all green.
+1. The agent detects frontend/backend/language/architecture partitions and loads only relevant references.
+2. The agent lists candidates first and supports "all modules" scope.
+3. The agent performs source-backed best-practice research before each module plan.
+4. The agent runs tests before refactor and after each refactor slice.
+5. The agent keeps going without optional confirmation when user says "do not stop".
+6. The agent updates docs and reports final completion with evidence.
+
+## Notes
+
+1. This skill enforces process discipline, not business-logic redesign by default.
+2. If no tests exist, the agent should establish a runnable test baseline first.
+3. Hard blockers (missing credentials, broken environment, external outages) are the only valid pause points when user requires nonstop execution.
 
 ## Multilingual
 
 <details>
 <summary>中文（Chinese）</summary>
 
-这是一个覆盖率门禁重构 Skill，支持按分区分步加载：`./fornt ./backend ./python ./typescript ./nextjs`。
+这是一个用于“覆盖率门禁重构”的 Codex Skill，适用于全项目、分模块、可验证的重构执行。
 
-### 设计原则
+### 设计思路
 
-1. 先拆大文件。
-2. 按业务边界拆分。
-3. 先测后改，改后再测。
-4. 模块覆盖率门禁 90%+。
-5. 前后端与文档同步推进。
-6. 必须分步加载分区包，不允许一次性全量加载。
-7. 用户说“不要停”时连续执行到完成（除硬阻塞外）。
+1. 先拆超大文件，再处理次级模块。
+2. 按业务边界拆分，不按行数硬切。
+3. 每次重构必须有测试证据，先测后改，改后再测。
+4. 模块级覆盖率目标 90%+（优先 statements/lines）。
+5. 前端、后端、文档一体化推进。
+6. 先识别前端/后端/语言/架构分区，再按需加载对应规则与最佳实践。
+7. 用户说“不要停”时，必须连续执行到完成，除非硬阻塞。
 
 ### 使用方式
 
-1. 先读取 `partition-loader.md`。
-2. 识别项目分区后，按需加载对应目录。
-3. 先读 `summary.md`，再按需打开 `sources/*.md`。
-4. 每个模块重构前用本地来源快照提炼规则并映射到代码动作。
+1. 按上方安装命令将 `SKILL.md`、`agents/openai.yaml` 和 `references/` 放到 `~/.codex/skills/coverage-gated-refactor/`。
+2. 在任务中明确要求：
+   - 先识别分区并按需加载
+   - 再枚举重构候选
+   - 指定“全部重构”或模块范围
+   - 指定“不要停”
+   - 指定覆盖率门禁（90%+）
+3. 预期执行顺序：
+   - 候选枚举
+   - 基线测试
+   - 模块测例补齐并达标
+   - 分片重构与回归
+   - 全量回归通过后完成
 
 ### 关键承诺
 
-1. 没有门禁不推进。
-2. 没有来源依据不推进。
+1. 有门禁才推进，无门禁不重构。
+2. 有调研证据才推进（官方来源优先）。
 3. 用户要求“不要停”时，不做可选确认中断。
+4. 完成标准是“全部选中模块完成 + 历史测试全绿 + 文档同步”。
 
 </details>
