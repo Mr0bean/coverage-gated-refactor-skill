@@ -1,4 +1,4 @@
 interface:
   display_name: "Coverage-Gated Refactor"
-  short_description: "Partition-aware full-stack refactors with 90 percent coverage gates"
-  default_prompt: "Detect frontend/backend/language/architecture partitions first, load only relevant reference packs, research official best practices for each partition, prioritize oversized file decomposition, enforce 90 percent module coverage with runnable tests before each refactor, execute autonomously end-to-end when requested, update related documentation, and finish only when all selected modules plus historical tests pass."
+  short_description: "Step-load refactor packs by fornt/backend/python/typescript/nextjs"
+  default_prompt: "Detect project partitions first, then step-load only matching packs from ./fornt ./backend ./python ./typescript ./nextjs, use local source snapshots in sources/*.md to derive best practices, prioritize oversized file decomposition, enforce 90 percent module coverage with runnable tests before each refactor, execute autonomously end-to-end when requested, and finish only when all selected modules plus historical tests pass."
