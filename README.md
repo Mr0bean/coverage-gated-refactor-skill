@@ -2,6 +2,15 @@
 
 A Codex skill for full-project refactors with strict safety gates.
 
+## Reference Packs
+
+This skill supports step loading from `reference/` with file naming:
+
+- `场景_语言_架构.md`
+- example: `backend_python_flask-microservice.md`
+
+Current project packs are listed in `reference/index.md`.
+
 ## Design Philosophy
 
 1. Split oversized files first to reduce structural risk.
@@ -30,6 +39,8 @@ mkdir -p ~/.codex/skills/coverage-gated-refactor
 cp SKILL.md ~/.codex/skills/coverage-gated-refactor/SKILL.md
 mkdir -p ~/.codex/skills/coverage-gated-refactor/agents
 cp agents/openai.yaml ~/.codex/skills/coverage-gated-refactor/agents/openai.yaml
+mkdir -p ~/.codex/skills/coverage-gated-refactor/reference
+cp -R reference/* ~/.codex/skills/coverage-gated-refactor/reference/
 ```
 
 ### 2. Start A Task
@@ -72,6 +83,7 @@ Use prompts like:
 ### 使用方式
 
 1. 按上方安装命令将 `SKILL.md` 和 `agents/openai.yaml` 放到 `~/.codex/skills/coverage-gated-refactor/`。
+   - 并同步 `reference/` 目录用于分步加载。
 2. 在任务中明确要求：
    - 先枚举重构候选
    - 指定“全部重构”或模块范围

@@ -10,6 +10,37 @@ description: "Drive full-project modular refactors with a strict pipeline: prior
 Run refactors as a gated engineering workflow, not as ad-hoc edits.  
 Keep behavior stable by proving parity with tests at every step.
 
+This skill supports step loading from `reference/` by naming pattern:
+
+- `场景_语言_架构.md`
+- example: `backend_python_flask-microservice.md`
+
+## Reference Packs (Current Project)
+
+Load reference files from `reference/`:
+
+1. `frontend_typescript_nextjs-app-router.md`
+2. `backend_typescript_nextjs-route-handlers.md`
+3. `backend_python_flask-microservice.md`
+4. `backend_typescript_json-file-storage.md`
+5. `platform_typescript-python_docker-single-container.md`
+6. `fullstack_typescript-python_modular-monolith-plus-sidecar.md`
+7. `other_typescript_jest-testing.md`
+
+### Reference Loading Rule (Mandatory)
+
+1. Read `reference/index.md` first.
+2. Load files by selected scope:
+   - `frontend`: `frontend_typescript_nextjs-app-router.md`
+   - `backend`: `backend_typescript_nextjs-route-handlers.md`, `backend_python_flask-microservice.md`, `backend_typescript_json-file-storage.md`, `platform_typescript-python_docker-single-container.md`
+   - `other`: `other_typescript_jest-testing.md`
+   - `all`: all files above
+3. For each loaded file, extract and apply:
+   - refactor approach
+   - compliance approach
+   - best practices
+4. Record loaded reference files in progress reports.
+
 ## Workflow
 
 ### 0. Capture Refactor Goal And Scope (Mandatory)
@@ -22,6 +53,7 @@ Keep behavior stable by proving parity with tests at every step.
    - all modules (frontend + backend + other)
 3. If user chooses `all`, execute full-scope workflow without skipping areas.
 4. Convert the user goal into success criteria and keep it in progress reports.
+5. After scope selection, load matching `reference/*.md` files before candidate planning.
 
 ### 1. Build Refactor Candidate Map (Mandatory)
 
@@ -145,21 +177,23 @@ Use this concise status format while executing:
 
 1. Refactor goal: user-stated purpose and success criteria.
 2. User scope: frontend/backend/other/all.
-3. Candidate map: listed modules and default order.
-4. Baseline: tests X pass / Y fail, coverage S/B/F/L.
-5. Module gate: module name, coverage, test status.
-6. Refactor progress: completed module list and next module.
-7. Final gate: full historical tests pass/fail and completion decision.
-8. Docs sync: updated docs list and validation result.
+3. Loaded references: selected `reference/*.md` files.
+4. Candidate map: listed modules and default order.
+5. Baseline: tests X pass / Y fail, coverage S/B/F/L.
+6. Module gate: module name, coverage, test status.
+7. Refactor progress: completed module list and next module.
+8. Final gate: full historical tests pass/fail and completion decision.
+9. Docs sync: updated docs list and validation result.
 
 ## Do Not
 
 1. Do not skip refactor-goal capture and scope selection.
-2. Do not skip module enumeration and user scope confirmation.
-3. Do not start module refactor before module test gate.
-4. Do not claim “fully guaranteed” behavior parity without evidence.
-5. Do not use destructive git commands unless explicitly requested.
-6. Do not weaken or bypass tests to hit target numbers.
-7. Do not stop midway when user asked for full autonomous completion, unless hard-blocked.
-8. Do not stop when user explicitly says "do not stop"; finish the entire pipeline in one continuous execution unless truly hard-blocked.
-9. 硬规则：当用户说“不要停”时，必须一口气做完，不得中断回问；仅在确实无法自行处理的硬阻塞下才可暂停并说明原因。
+2. Do not skip scoped reference loading from `reference/`.
+3. Do not skip module enumeration and user scope confirmation.
+4. Do not start module refactor before module test gate.
+5. Do not claim “fully guaranteed” behavior parity without evidence.
+6. Do not use destructive git commands unless explicitly requested.
+7. Do not weaken or bypass tests to hit target numbers.
+8. Do not stop midway when user asked for full autonomous completion, unless hard-blocked.
+9. Do not stop when user explicitly says "do not stop"; finish the entire pipeline in one continuous execution unless truly hard-blocked.
+10. 硬规则：当用户说“不要停”时，必须一口气做完，不得中断回问；仅在确实无法自行处理的硬阻塞下才可暂停并说明原因。
