@@ -12,6 +12,17 @@ Keep behavior stable by proving parity with tests at every step.
 
 ## Workflow
 
+### 0. Capture Refactor Goal And Scope (Mandatory)
+
+1. Require the user to describe the refactor goal first (why this refactor is needed).
+2. Require the user to choose scope before planning:
+   - frontend
+   - backend
+   - other modules
+   - all modules (frontend + backend + other)
+3. If user chooses `all`, execute full-scope workflow without skipping areas.
+4. Convert the user goal into success criteria and keep it in progress reports.
+
 ### 1. Build Refactor Candidate Map (Mandatory)
 
 1. Inventory code by module boundaries, file size, coupling, churn risk, and bug density.
@@ -31,7 +42,7 @@ Keep behavior stable by proving parity with tests at every step.
 
 1. If user explicitly requires full autonomous execution, continue end-to-end without pausing for optional confirmation.
 2. If user explicitly says "do not stop" or equivalent, do not pause for stage handoffs, progress approvals, or reconfirmation prompts.
-   - 中文硬规则：用户明确要求“不要停”时，不得中途停下来询问、确认或等待批准，必须连续执行到全部任务完成（除非遇到无法自行解决的硬阻塞）。
+   - 硬规则：用户明确要求“不要停”时，不得中途停下来询问、确认或等待批准，必须连续执行到全部任务完成（除非遇到无法自行解决的硬阻塞）。
 3. Execute continuously in one run until all selected scope and all gates are completed.
 4. Ask questions only for hard blockers that cannot be resolved from repository context.
 5. Keep executing module by module until all selected scope is completed and all gates pass.
@@ -132,21 +143,23 @@ Rules:
 
 Use this concise status format while executing:
 
-1. Candidate map: listed modules and default order.
-2. User scope: selected modules or all modules.
-3. Baseline: tests X pass / Y fail, coverage S/B/F/L.
-4. Module gate: module name, coverage, test status.
-5. Refactor progress: completed module list and next module.
-6. Final gate: full historical tests pass/fail and completion decision.
-7. Docs sync: updated docs list and validation result.
+1. Refactor goal: user-stated purpose and success criteria.
+2. User scope: frontend/backend/other/all.
+3. Candidate map: listed modules and default order.
+4. Baseline: tests X pass / Y fail, coverage S/B/F/L.
+5. Module gate: module name, coverage, test status.
+6. Refactor progress: completed module list and next module.
+7. Final gate: full historical tests pass/fail and completion decision.
+8. Docs sync: updated docs list and validation result.
 
 ## Do Not
 
-1. Do not skip module enumeration and user scope confirmation.
-2. Do not start module refactor before module test gate.
-3. Do not claim “fully guaranteed” behavior parity without evidence.
-4. Do not use destructive git commands unless explicitly requested.
-5. Do not weaken or bypass tests to hit target numbers.
-6. Do not stop midway when user asked for full autonomous completion, unless hard-blocked.
-7. Do not stop when user explicitly says "do not stop"; finish the entire pipeline in one continuous execution unless truly hard-blocked.
-8. 中文硬规则：当用户说“不要停”时，必须一口气做完，不得中断回问；仅在确实无法自行处理的硬阻塞下才可暂停并说明原因。
+1. Do not skip refactor-goal capture and scope selection.
+2. Do not skip module enumeration and user scope confirmation.
+3. Do not start module refactor before module test gate.
+4. Do not claim “fully guaranteed” behavior parity without evidence.
+5. Do not use destructive git commands unless explicitly requested.
+6. Do not weaken or bypass tests to hit target numbers.
+7. Do not stop midway when user asked for full autonomous completion, unless hard-blocked.
+8. Do not stop when user explicitly says "do not stop"; finish the entire pipeline in one continuous execution unless truly hard-blocked.
+9. 硬规则：当用户说“不要停”时，必须一口气做完，不得中断回问；仅在确实无法自行处理的硬阻塞下才可暂停并说明原因。
