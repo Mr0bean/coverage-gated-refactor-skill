@@ -1,6 +1,6 @@
 # Coverage-Gated Refactor Skill
 
-A Codex skill for full-project refactors with strict safety gates.
+A Codex skill for full-project refactors with strict safety gates, partition-aware loading, and source-backed best-practice research.
 
 ## Design Philosophy
 
@@ -9,17 +9,20 @@ A Codex skill for full-project refactors with strict safety gates.
 3. Build test evidence before and after each refactor slice.
 4. Require strong module coverage (target: 90%+) before deep changes.
 5. Cover frontend, backend, and related docs in one workflow.
-6. If the user says "do not stop", execute continuously end-to-end unless hard-blocked.
+6. Detect frontend/backend/language/architecture partitions first, then load only relevant guidance.
+7. If the user says "do not stop", execute continuously end-to-end unless hard-blocked.
 
 ## Workflow (High Level)
 
-1. Enumerate refactor candidates for user scope selection.
-2. Build/repair baseline test and coverage pipeline.
-3. For each selected module: write tests first and hit coverage gate.
-4. Refactor in safe slices and run tests after each slice.
-5. Run full regression after each module.
-6. Update documentation to match the new structure.
-7. Finish only when all selected modules and historical tests pass.
+1. Detect technology partitions and load scoped reference packs.
+2. Enumerate refactor candidates for user scope selection.
+3. Build/repair baseline test and coverage pipeline.
+4. Run per-partition best-practice research from primary sources.
+5. For each selected module: write tests first and hit coverage gate.
+6. Refactor in safe slices and run tests after each slice.
+7. Run full regression after each module.
+8. Update documentation to match the new structure.
+9. Finish only when all selected modules and historical tests pass.
 
 ## How To Use
 
@@ -30,22 +33,27 @@ mkdir -p ~/.codex/skills/coverage-gated-refactor
 cp SKILL.md ~/.codex/skills/coverage-gated-refactor/SKILL.md
 mkdir -p ~/.codex/skills/coverage-gated-refactor/agents
 cp agents/openai.yaml ~/.codex/skills/coverage-gated-refactor/agents/openai.yaml
+mkdir -p ~/.codex/skills/coverage-gated-refactor/references
+cp -R references/* ~/.codex/skills/coverage-gated-refactor/references/
 ```
 
 ### 2. Start A Task
 
 Use prompts like:
 
-1. `Use coverage-gated-refactor. Enumerate all refactor candidates first.`
+1. `Use coverage-gated-refactor. Detect partitions and enumerate all refactor candidates first.`
 2. `Refactor all modules. Do not stop.`
-3. `Keep module coverage above 90% and run full regression after each module.`
+3. `Research best practices for each detected partition from official docs before refactoring.`
+4. `Keep module coverage above 90% and run full regression after each module.`
 
 ### 3. Expected Behavior
 
-1. The agent lists candidates first and supports "all modules" scope.
-2. The agent runs tests before refactor and after each refactor slice.
-3. The agent keeps going without optional confirmation when user says "do not stop".
-4. The agent updates docs and reports final completion with evidence.
+1. The agent detects frontend/backend/language/architecture partitions and loads only relevant references.
+2. The agent lists candidates first and supports "all modules" scope.
+3. The agent performs source-backed best-practice research before each module plan.
+4. The agent runs tests before refactor and after each refactor slice.
+5. The agent keeps going without optional confirmation when user says "do not stop".
+6. The agent updates docs and reports final completion with evidence.
 
 ## Notes
 
@@ -67,13 +75,15 @@ Use prompts like:
 3. 每次重构必须有测试证据，先测后改，改后再测。
 4. 模块级覆盖率目标 90%+（优先 statements/lines）。
 5. 前端、后端、文档一体化推进。
-6. 用户说“不要停”时，必须连续执行到完成，除非硬阻塞。
+6. 先识别前端/后端/语言/架构分区，再按需加载对应规则与最佳实践。
+7. 用户说“不要停”时，必须连续执行到完成，除非硬阻塞。
 
 ### 使用方式
 
-1. 按上方安装命令将 `SKILL.md` 和 `agents/openai.yaml` 放到 `~/.codex/skills/coverage-gated-refactor/`。
+1. 按上方安装命令将 `SKILL.md`、`agents/openai.yaml` 和 `references/` 放到 `~/.codex/skills/coverage-gated-refactor/`。
 2. 在任务中明确要求：
-   - 先枚举重构候选
+   - 先识别分区并按需加载
+   - 再枚举重构候选
    - 指定“全部重构”或模块范围
    - 指定“不要停”
    - 指定覆盖率门禁（90%+）
@@ -87,7 +97,8 @@ Use prompts like:
 ### 关键承诺
 
 1. 有门禁才推进，无门禁不重构。
-2. 用户要求“不要停”时，不做可选确认中断。
-3. 完成标准是“全部选中模块完成 + 历史测试全绿 + 文档同步”。
+2. 有调研证据才推进（官方来源优先）。
+3. 用户要求“不要停”时，不做可选确认中断。
+4. 完成标准是“全部选中模块完成 + 历史测试全绿 + 文档同步”。
 
 </details>
