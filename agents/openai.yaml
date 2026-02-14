@@ -1,0 +1,4 @@
+interface:
+  display_name: "Coverage-Gated Refactor"
+  short_description: "Split oversized files with autonomous full-stack test-gated refactors"
+  default_prompt: "Prioritize oversized file decomposition, enumerate frontend and backend refactor scope for user selection, enforce 90 percent module coverage with runnable tests before each refactor, execute autonomously end-to-end when requested, update related documentation, and finish only when all selected modules plus historical tests pass."
