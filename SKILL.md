@@ -1,49 +1,16 @@
 ---
 name: coverage-gated-refactor
-description: "Drive full-project modular refactors with partition-aware loading by frontend/backend/language/architecture, research official best practices per partition, enforce 90 percent module coverage gates, and execute autonomously end-to-end when requested."
+description: "Drive full-project modular refactors with a strict pipeline: prioritize splitting oversized files, enumerate candidates for user scope selection, raise per-module test coverage to at least 90 percent with verified runnable tests, refactor frontend and backend in slices with immediate regression checks, update related documentation, and finish only when all selected modules plus historical tests pass."
 ---
 
 # Coverage Gated Refactor
 
 ## Overview
 
-Run refactors as a gated engineering workflow, not as ad-hoc edits.
+Run refactors as a gated engineering workflow, not as ad-hoc edits.  
 Keep behavior stable by proving parity with tests at every step.
 
-This skill uses partition-aware loading:
-- detect frontend/backend boundaries
-- detect language stack
-- detect architecture style
-- load only the relevant reference packs before planning/refactoring
-
-## Progressive Loading Navigation
-
-Read files in this order:
-
-1. `SKILL.md` (core workflow and hard rules)
-2. `references/partition-selection.md` (stack detection + partition mapping)
-3. Only the matched packs:
-   - `references/frontend-best-practices.md`
-   - `references/backend-best-practices.md`
-   - `references/language-best-practices.md`
-   - `references/architecture-best-practices.md`
-4. `references/research-checklist.md` (research depth + reporting template)
-
-Do not bulk-load all references if partitions are already known.
-
 ## Workflow
-
-### 0. Partition Detection And Scoped Loading (Mandatory)
-
-1. Detect stack signals from repository files before writing plans.
-2. Identify partitions across four axes:
-   - frontend
-   - backend
-   - language
-   - architecture style
-3. Build a partition map with concrete evidence (`file path -> detected partition`).
-4. Load only matching reference packs.
-5. If detection is ambiguous, run targeted web research from primary sources and record assumptions.
 
 ### 1. Build Refactor Candidate Map (Mandatory)
 
@@ -58,7 +25,7 @@ Do not bulk-load all references if partitions are already known.
 5. Present options to user:
    - Select specific modules
    - Select all modules
-6. If user says "all", execute full list without skipping.
+6. If user says “all”, execute full list without skipping.
 
 ### 2. Autonomous Execution Rule (Mandatory)
 
@@ -69,25 +36,21 @@ Do not bulk-load all references if partitions are already known.
 4. Ask questions only for hard blockers that cannot be resolved from repository context.
 5. Keep executing module by module until all selected scope is completed and all gates pass.
 
-### 3. Baseline And Test Infrastructure
+### 3. Baseline and Test Infrastructure
 
 1. Add missing scripts (`test`, `test:coverage`, optional `test:watch`).
 2. Run historical test suite and collect baseline pass/fail + coverage numbers.
 3. Fix broken imports, aliases, mocks, and environment issues so tests are runnable.
 4. Record baseline report before writing new tests.
 
-### 4. Best-Practice Research Gate Per Partition (Mandatory)
+### 4. Best-Practice Research Before Each Module Refactor
 
-Before each module refactor, perform partition-specific research:
+For each selected module, before coding:
 
-1. For each matched partition, gather primary sources (official docs/specs/guides first).
-2. Minimum evidence set for each module plan:
-   - one framework/platform source
-   - one language source
-   - one architecture source
-3. Extract an "adopted practices" list and map each item to an implementation decision.
-4. Record source URL and verification date in the plan/log.
-5. Keep behavior-compatible decisions unless user explicitly requests behavior changes.
+1. Search current best practices relevant to that module type and stack.
+2. Prefer official docs, framework guides, and primary sources.
+3. Extract a short “adopted practices” list and map it to the module plan.
+4. Keep behavior-compatible decisions unless user requested behavior change.
 
 ### 5. Module Test Gate (At Least 90 Percent)
 
@@ -103,7 +66,7 @@ For each selected module:
 4. Execute tests and verify they are actually runnable and stable.
 5. Do not start module refactor until module test gate is green.
 
-### 6. Refactor Module In Safe Slices
+### 6. Refactor Module in Safe Slices
 
 For each selected module:
 
@@ -145,7 +108,7 @@ Then explicitly notify user that refactor is completed.
 
 ## Full-Stack And Docs Scope
 
-1. Include frontend and backend modules in the same gated workflow when scope is "all".
+1. Include frontend and backend modules in the same gated workflow when scope is “all”.
 2. Refactor docs that describe touched modules, interfaces, or workflows.
 3. Validate docs are consistent with renamed files, extracted modules, and updated commands.
 
@@ -169,25 +132,21 @@ Rules:
 
 Use this concise status format while executing:
 
-1. Partition map: detected frontend/backend/language/architecture + evidence files.
-2. Candidate map: listed modules and default order.
-3. User scope: selected modules or all modules.
-4. Baseline: tests X pass / Y fail, coverage S/B/F/L.
-5. Research gate: source links + adopted practices per partition.
-6. Module gate: module name, coverage, test status.
-7. Refactor progress: completed module list and next module.
-8. Final gate: full historical tests pass/fail and completion decision.
-9. Docs sync: updated docs list and validation result.
+1. Candidate map: listed modules and default order.
+2. User scope: selected modules or all modules.
+3. Baseline: tests X pass / Y fail, coverage S/B/F/L.
+4. Module gate: module name, coverage, test status.
+5. Refactor progress: completed module list and next module.
+6. Final gate: full historical tests pass/fail and completion decision.
+7. Docs sync: updated docs list and validation result.
 
 ## Do Not
 
-1. Do not skip partition detection and scoped reference loading.
-2. Do not skip module enumeration and user scope confirmation.
-3. Do not start module refactor before module test gate.
-4. Do not claim "fully guaranteed" behavior parity without evidence.
-5. Do not use destructive git commands unless explicitly requested.
-6. Do not weaken or bypass tests to hit target numbers.
-7. Do not stop midway when user asked for full autonomous completion, unless hard-blocked.
-8. Do not stop when user explicitly says "do not stop"; finish the entire pipeline in one continuous execution unless truly hard-blocked.
-9. 中文硬规则：当用户说“不要停”时，必须一口气做完，不得中断回问；仅在确实无法自行处理的硬阻塞下才可暂停并说明原因。
-10. Do not load irrelevant reference packs that do not match detected partitions.
+1. Do not skip module enumeration and user scope confirmation.
+2. Do not start module refactor before module test gate.
+3. Do not claim “fully guaranteed” behavior parity without evidence.
+4. Do not use destructive git commands unless explicitly requested.
+5. Do not weaken or bypass tests to hit target numbers.
+6. Do not stop midway when user asked for full autonomous completion, unless hard-blocked.
+7. Do not stop when user explicitly says "do not stop"; finish the entire pipeline in one continuous execution unless truly hard-blocked.
+8. 中文硬规则：当用户说“不要停”时，必须一口气做完，不得中断回问；仅在确实无法自行处理的硬阻塞下才可暂停并说明原因。
